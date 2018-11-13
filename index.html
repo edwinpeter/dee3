@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+    <!--CSS Scripts-->
+
+    <!--build:css css/style.min.css -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.gridster.min.css">
+    <link href="css/select2.min.css" rel="stylesheet" />
+    <!-- endbuild -->
+
+    <!--build:js js/main.min.js -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.gridster.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/select2.min.js"></script>
+    <script src="js/excellentexport.min.js"></script>
+    <!-- endbuild -->
+
+</head>
+<body>
+
+<select class="check" id = "timer1" style="display:none;">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+</select>
+
+
+<select class="check2" id = "timer2" style="display:none;">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option selected value="12">12</option>
+</select>
+
+
+<h1></h1>
+    <!-- <p>1. Set the time period to analyze between <span class="slider-time" style="font-weight:bold;">Jan</span> and <span class="slider-time2" style="font-weight:bold;">Dec</span>
+<div id="time-range">
+    </p>
+    <div class="sliders_step1">
+        <div class="flat-slider" id="slider-range"></div>
+    </div>
+</div> -->
+<button class="btn-reset" id="resetbtn" onclick="reset()">Reset</button>
+
+<p>Select a division </p>
+
+<fieldset>
+  <legend>Divisions</legend>
+  <div class="radios">
+    <label for="ALL" >
+    <input type="radio" value="ALL" name="stack" id="ALL"> <span style="font-weight:bold;">ALL</span>
+    </label>
+    </div>
+</fieldset>
+
+<script>
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function(){
+        $('<img/>')[0].src = this;
+    });
+}
+
+$(document).ready(function(){
+    var startdate,enddate;
+    $("#slider-range").slider({
+        range: true,
+        min: 1,
+        max: 12,
+        step: 1,
+        values: [1, 12],
+        slide: function(e, ui) {
+            var months = ['Jan', 'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            $('.slider-time').html(months[ui.values[0]-1]);
+            $('.slider-time2').html(months[ui.values[1]-1]);
+        },
+        stop: function(event, ui) {
+            startdate = $('.slider-time').html();
+            enddate = $('.slider-time2').html();
+            var t1 = ui.values[0];
+            var t2 = ui.values[1];
+
+            $('.check').val(t1).change();
+            $('.check2').val(t2).change();
+        }
+    });
+    startdate = $('.slider-time').html();
+    enddate = $('.slider-time2').html();
+
+  // set up radio boxes
+    $('.radioholder').each(function(){
+        $(this).children().hide();
+        var description = $(this).children('label').html();
+        $(this).append('<span class="desc">'+description+'</span>');
+        $(this).prepend('<span class="tick"></span>');
+        // on click, update radio boxes accordingly
+        $(this).click(function(){
+            $(this).children('input').prop('checked', true);
+            $(this).children('input').trigger('change');
+        });
+    });
+    $('#resetbtn').click(function(){
+        $(".radioholder").each(function(i) {
+            $(this).children('input').prop('checked', false);
+            $(this).children('input').trigger('change');
+        });
+    });
+    // update radio holder classes when a radio element changes
+    $('input[type=radio]').change(function(){
+    $('input[type=radio]').each(function(){
+      if($(this).prop('checked') == true) {
+        $(this).parent().addClass('activeradioholder');
+      }
+            else $(this).parent().removeClass('activeradioholder');
+        });
+    });
+
+
+
+    // manually fire radio box change event on page load
+    //$('input[type=radio]').change();
+    // preload hover images
+  preload([
+    'images/radio_tick.png'
+  ]);
+});
+</script>
+
+
+
+<div class="gridster">
+    <ul>
+        <li data-sizey="4" data-sizex="3" data-col="1" data-row="1" data-min-sizex="2" data-min-sizey="4">
+            <header>
+            <ul id="drop_list1" class="connect_lists" style="min-width:30%px; height:30px; width: 10px;  position:absolute;">
+                <div style="text-align:left; font-weight:200; padding:5px;margin-left:-35px;">Search Analysis</div>
+            </ul>
+            </header>
+            <div id='dashboard'>
+            </div>
+            <div id="search-table" style="visibility: none;">
+            <a download="global-search-results.xls" href="#" onclick="return ExcellentExport.excel(this, 'search-table', 'global-searchresults');">
+                <img id="downloadlink1" class="dragHandle" src="images/excel2.png" width="25px" height="25px" style="cursor: pointer; visibility:hidden;"/>
+            </a>
+            </div>
+        </li>
+
+        <li data-sizey="4" data-sizex="3" data-col="1" data-row="1" data-min-sizex="2" data-min-sizey="4">
+            <header>
+            <ul id="drop_list1" class="connect_lists" style="min-width:30%px; height:30px; width: 10px;  position:absolute;">
+                <div style="text-align:left; font-weight:200; padding:5px; margin-left:-35px;">Path Analysis of: 
+                    <div class="side-by-side clearfix" >
+                        <div>
+                            <div class="endtable">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ul>
+
+            </header>
+            <div id="main">
+                <div id="sequence-container">
+                    <div id="sequence" class="breadcrumbs-container"></div>
+                </div>
+                <div id="chart">
+                    <div id="explanation" style="visibility: hidden;">
+                        <div id="pop"></div>
+                            <span id="percentage"></span><br/>
+                            <div style="font-size:0.5em;">visited pages in this sequence</div>
+                    </div>
+                </div>
+                <div id="extratable1" style="visibility: none;">
+                </div>
+                <div id="extratable2" style="visibility: none;">
+                <a download="also-visited.xls" href="#" onclick="return ExcellentExport.excel(this, 'alsovisited', 'also-visited');">
+                <img id="downloadlink3" class="dragHandle" src="images/excel2.png" width="25px" height="25px" style="cursor: pointer; visibility:hidden;"/>
+                </a>
+                </div>
+            </div>
+            <a href="#menu" id="toggle"><span></span></a>
+                <div id="menu">
+                    <div class="userbox" id="side">
+                        <div id="list-wrap">
+                            Using "Search" to get to this endgoal:
+                            <a download="search-to-endgoal.xls" href="#" onclick="return ExcellentExport.excel(this, 'searchedalso', 'searchedtoendgoal');">
+                            <img id="downloadlink2" class="dragHandle" src="images/excel2.png" width="25px" height="25px" style="cursor: pointer; visibility:hidden;"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+        </li>
+    </ul>
+</div>
+
+
+<style type="text/css">
+
+    .gridster li header {
+        background: #999;
+        display: block;
+        font-size: 15px;
+        line-height: normal;
+        margin-bottom: 20px;
+    }
+
+</style>
+
+<script type="text/javascript">
+
+    var gridster;
+
+    $(function () {
+
+        gridster = $(".gridster ul").gridster({
+            widget_base_dimensions: ['auto', 140],
+            widget_margins: [5, 5],
+            min_cols: 1,
+            max_cols: 6,
+            draggable: {
+                handle: '.dragHandle'
+            },
+            resize:{
+                enabled:true
+            }
+        }).data('gridster');
+
+    });
+
+    $('#btn').click(function(e){
+        $('#btn').fadeOut('slow', function(){
+            gridster.add_widget.apply(gridster, ['<li data-sizey="4" data-sizex="3" data-col="1" data-row="1" data-min-sizex="3" data-min-sizey="4">', 3, 4]);
+            $('#drag2').fadeIn('slow');
+            $('#drop_list2').fadeIn('slow');
+
+
+        });
+
+    }, {passive: false});
+
+</script>
+
+<footer>
+<script src="js/d3.min.js"></script>
+<script src="js/sequences.js" type="text/javascript" charset="utf-8" id="scripts"></script>
+
+
+<script>
+      $(document).on("change", "#endgoals", function(){
+        var endgoal = $( "#endgoals option:selected" ).text();
+        startdate = $('.slider-time').html();
+        enddate = $('.slider-time2').html();
+        division = $('.activeradioholder').children('label').html();
+      });
+</script>
+
+</footer>
+
+</body>
+</html>
